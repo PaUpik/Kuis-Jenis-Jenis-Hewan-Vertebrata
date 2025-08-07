@@ -280,3 +280,58 @@ document.getElementById('quizForm').onsubmit = function(e) {
     document.getElementById("quizForm").style.display = "none";
     resultDiv.innerHTML = pesan;
 };
+// --- FUNGSI EKSPOR CSV ---
+function downloadCSV() {
+    // Siapkan header & data
+    let lines = [];
+    lines.push(['Nama', namaSiswa]);
+    lines.push(['Skor', resultDiv.innerText.replace('Nilai kamu: ', '').replace('Luar biasa! Semua benar 😎', '').replace('Hampir sempurna, mantap!', '').replace('Lumayan, ayo belajar lagi!', '').replace('Yuk, lebih giat belajar tentang hewan vertebrata!', '')]);
+    lines.push([]); // Kosong, untuk spasi
+
+    // Judul kolom
+    lines.push(['No', 'Soal', 'Jawaban']);
+
+    questions.forEach((q, i) => {
+        let jawab = userAnswers[q.name] || '';
+        lines.push([
+            i+1,
+            q.question.replace(/"/g, '""'),
+            jawab.replace(/"/g, '""')
+        ]);
+    });
+
+    // Gabung jadi CSV string
+    let csvContent = lines.map(row => row.map(item => `"${item}"`).join(',')).join('\r\n');
+
+    // Download
+    let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    let link = document.createElement("a");
+    let filename = `kuis-vertebrata-${namaSiswa.replace(/[^a-z0-9]/gi,'_').toLowerCase()}.csv`;
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, filename);
+    } else {
+        let url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+// --- Tampilkan tombol download setelah submit ---
+const downloadBtn = document.getElementById('downloadBtn');
+if (downloadBtn) {
+    downloadBtn.addEventListener('click', downloadCSV);
+}
+
+// Setelah submit, tampilkan tombol download
+// (Edit bagian paling bawah di onsubmit quizForm!)
+document.getElementById('quizForm').onsubmit = function(e) {
+    // ...[kode penilaianmu tetap]...
+    document.getElementById("quizForm").style.display = "none";
+    resultDiv.innerHTML = pesan;
+    // TAMBAHKAN INI:
+    if (downloadBtn) downloadBtn.style.display = "block";
+};
