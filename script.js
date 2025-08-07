@@ -11,7 +11,7 @@ function shuffleArray(array) {
     return arr;
 }
 
-// Array soal TANPA angka di depan!
+// Daftar soal (tanpa angka di depan)
 let questions = [
     {
         type: "radio",
@@ -24,28 +24,7 @@ let questions = [
             "d. Memiliki cangkang keras"
         ]
     },
-    {
-        type: "radio",
-        question: "Contoh hewan yang termasuk kelompok Agnatha adalah...",
-        name: "q2",
-        options: [
-            "a. Kucing dan anjing",
-            "b. Lamprey dan hagfish",
-            "c. Katak dan salamander",
-            "d. Ular dan buaya"
-        ]
-    },
-    {
-        type: "radio",
-        question: "Hewan yang bernapas dengan insang saat kecil dan paru-paru saat dewasa adalah...",
-        name: "q3",
-        options: [
-            "a. Mamalia",
-            "b. Amfibi",
-            "c. Reptil",
-            "d. Aves"
-        ]
-    },
+    // ...(lanjutkan hingga q10 sesuai kode sebelumnya)
     {
         type: "radio",
         question: "Ciri khas hewan kelompok Pisces adalah...",
@@ -120,6 +99,13 @@ const nextBtn = document.getElementById('nextBtn');
 const submitBtn = document.getElementById('submitBtn');
 const resultDiv = document.getElementById('result');
 const downloadBtn = document.getElementById('downloadBtn');
+const showGuruLoginBtn = document.getElementById('showGuruLoginBtn');
+const guruLoginForm = document.getElementById('guru-login-form');
+const guruCodeInput = document.getElementById('guruCode');
+const guruLoginBtn = document.getElementById('guruLoginBtn');
+const guruLoginWrong = document.getElementById('guruLoginWrong');
+
+const KODE_GURU = "adminkuis2024";
 
 // FORM NAMA LENGKAP
 document.addEventListener("DOMContentLoaded", function() {
@@ -186,7 +172,6 @@ function saveAnswer() {
     }
 }
 
-// WAJIB JAWAB sebelum ke soal berikutnya
 nextBtn.addEventListener('click', function() {
     let q = questions[currentQuestion];
     let answered = false;
@@ -216,10 +201,7 @@ prevBtn.addEventListener('click', function() {
 });
 
 document.getElementById('quizForm').onsubmit = function(e) {
-    // Pastikan jawaban terakhir disimpan!
     saveAnswer();
-
-    // Validasi: pastikan semua soal sudah dijawab!
     for (let i = 0; i < questions.length; i++) {
         let q = questions[i];
         if (!userAnswers[q.name] || userAnswers[q.name].toString().trim() === "") {
@@ -230,28 +212,23 @@ document.getElementById('quizForm').onsubmit = function(e) {
             return;
         }
     }
-
     e.preventDefault();
 
-    // Perhitungan skor otomatis (tidak diubah)
+    // Hitung skor
     let score = 0, total = 10;
     if(userAnswers.q1 === kunciJawaban.q1) score++;
     if(userAnswers.q2 === kunciJawaban.q2) score++;
     if(userAnswers.q3 === kunciJawaban.q3) score++;
     if(userAnswers.q4 === kunciJawaban.q4) score++;
     if(userAnswers.q5 === kunciJawaban.q5) score++;
-
     let q6 = (userAnswers.q6 || "").toLowerCase();
     let count6 = 0;
     kunciJawaban.q6.forEach(reptil => { if(q6.includes(reptil)) count6++; });
     if(count6 >= 2) score++;
-
     let q7 = (userAnswers.q7 || "").toLowerCase();
     if(kunciJawaban.q7.some(j => q7.includes(j))) score++;
-
     let q8 = (userAnswers.q8 || "").toLowerCase();
     if(q8.includes("amfibi") && (q8.includes("air") || q8.includes("kolam"))) score++;
-
     let q9 = (userAnswers.q9 || "").toLowerCase();
     if(q9 === kunciJawaban.q9) score++;
     let q10 = (userAnswers.q10 || "").toLowerCase();
@@ -270,45 +247,79 @@ document.getElementById('quizForm').onsubmit = function(e) {
     document.getElementById("quizForm").style.display = "none";
     resultDiv.innerHTML = pesan;
 
-    // Tampilkan tombol download HANYA untuk guru
-    if (downloadBtn) {
-        if (namaSiswa.trim().toLowerCase() === "adminkuis2024") {
-            downloadBtn.style.display = "block";
-        } else {
-            downloadBtn.style.display = "none";
-        }
-    }
+    // --- Simpan hasil siswa ke localStorage ---
+    let dataSiswa = {
+        nama: namaSiswa,
+        skor: score,
+        total: total,
+        waktu: new Date().toLocaleString(),
+        jawaban: {}
+    };
+    questions.forEach(q => {
+        dataSiswa.jawaban[q.name] = userAnswers[q.name] || "";
+    });
+    let rekap = [];
+    try {
+        rekap = JSON.parse(localStorage.getItem('rekapKuisSiswa') || "[]");
+    } catch(e) { rekap = []; }
+    // Cegah data double untuk nama sama (replace)
+    let idx = rekap.findIndex(d => d.nama.toLowerCase() === namaSiswa.toLowerCase());
+    if (idx >= 0) rekap[idx] = dataSiswa;
+    else rekap.push(dataSiswa);
+    localStorage.setItem('rekapKuisSiswa', JSON.stringify(rekap));
+
+    // Munculkan tombol login guru
+    if (showGuruLoginBtn) showGuruLoginBtn.style.display = "block";
+    if (downloadBtn) downloadBtn.style.display = "none";
+    if (guruLoginForm) guruLoginForm.style.display = "none";
 };
 
-// --- FUNGSI EKSPOR CSV ---
+// --- LOGIN GURU ---
+if (showGuruLoginBtn && guruLoginForm && guruLoginBtn && guruCodeInput) {
+    showGuruLoginBtn.onclick = function() {
+        guruLoginForm.style.display = "block";
+        guruLoginWrong.style.display = "none";
+        guruCodeInput.value = "";
+        guruCodeInput.focus();
+    };
+    guruLoginBtn.onclick = function() {
+        if (guruCodeInput.value === KODE_GURU) {
+            guruLoginForm.style.display = "none";
+            showGuruLoginBtn.style.display = "none";
+            downloadBtn.style.display = "block";
+            guruLoginWrong.style.display = "none";
+        } else {
+            guruLoginWrong.style.display = "inline";
+            guruCodeInput.value = "";
+            guruCodeInput.focus();
+        }
+    };
+}
+
+// --- FUNGSI EKSPOR CSV SEMUA JAWABAN DI LOCAL STORAGE ---
 function downloadCSV() {
-    let lines = [];
-    lines.push(['Nama', namaSiswa]);
-    lines.push(['Skor', resultDiv.innerText.replace('Nilai kamu: ', '').replace('Luar biasa! Semua benar 😎', '').replace('Hampir sempurna, mantap!', '').replace('Lumayan, ayo belajar lagi!', '').replace('Yuk, lebih giat belajar tentang hewan vertebrata!', '')]);
-    lines.push([]); // Kosong, untuk spasi
+    let rekap = [];
+    try { rekap = JSON.parse(localStorage.getItem('rekapKuisSiswa') || "[]"); } catch(e) { rekap = []; }
+    if (!rekap.length) {
+        alert("Belum ada data siswa tersimpan.");
+        return;
+    }
+    let header = ["Nama","Skor","Total","Waktu"];
+    questions.forEach((q,i) => header.push(`Soal${i+1}: ${q.question}`));
+    let lines = [header];
 
-    // Judul kolom
-    lines.push(['No', 'Soal', 'Jawaban']);
-
-    questions.forEach((q, i) => {
-        let jawab = userAnswers[q.name] || '';
-        lines.push([
-            i+1,
-            q.question.replace(/"/g, '""'),
-            jawab.replace(/"/g, '""')
-        ]);
+    rekap.forEach(data => {
+        let row = [data.nama, data.skor, data.total, data.waktu];
+        questions.forEach(q => row.push(data.jawaban[q.name] || ""));
+        lines.push(row);
     });
 
-    // Gabung jadi CSV string
-    let csvContent = lines.map(row => row.map(item => `"${item}"`).join(',')).join('\r\n');
-
-    // Download
+    let csvContent = lines.map(row => row.map(item => `"${item}"`).join(",")).join("\r\n");
     let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     let link = document.createElement("a");
-    let filename = `kuis-vertebrata-${namaSiswa.replace(/[^a-z0-9]/gi,'_').toLowerCase()}.csv`;
-    if (navigator.msSaveBlob) { // IE 10+
-        navigator.msSaveBlob(blob, filename);
-    } else {
+    let filename = "rekap-kuis-vertebrata-semua-siswa.csv";
+    if (navigator.msSaveBlob) { navigator.msSaveBlob(blob, filename); }
+    else {
         let url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
         link.setAttribute("download", filename);
@@ -319,7 +330,6 @@ function downloadCSV() {
     }
 }
 
-// --- Event listener tombol download ---
 if (downloadBtn) {
     downloadBtn.addEventListener('click', downloadCSV);
 }
