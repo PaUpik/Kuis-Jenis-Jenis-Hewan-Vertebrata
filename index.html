@@ -4,41 +4,31 @@
     <meta charset="UTF-8">
     <title>Kuis Jenis-Jenis Hewan Vertebrata</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <div class="container">
-        <h1 id="judul-kuis">Kuis: Jenis-Jenis Hewan Vertebrata</h1>
-        
-        <!-- Form Nama Lengkap -->
-        <div id="form-nama">
-            <label for="namaSiswa"><b>Nama Lengkap:</b></label>
-            <input type="text" id="namaSiswa" placeholder="Isi nama lengkap" autocomplete="off">
-            <button id="mulaiBtn">Mulai Kuis</button>
-        </div>
+<div class="container">
+    <h1 id="judul-kuis">Kuis: Jenis-Jenis Hewan Vertebrata</h1>
 
-        <!-- Form Kuis -->
-        <form id="quizForm" style="display:none;">
-            <div id="question-container"></div>
-            <div id="nav-buttons">
-                <button type="button" id="prevBtn" style="display:none"></button>
-                <button type="button" id="nextBtn"></button>
-                <button type="submit" id="submitBtn" style="display:none">Lihat Hasil</button>
-            </div>
-        </form>
-        
-        <div id="result"></div>
-        
-        <!-- Tombol Login Guru & Form kode akses -->
-        <button id="showGuruLoginBtn" style="display:none; margin:20px auto 0 auto;">Login Guru</button>
-        <div id="guru-login-form" style="display:none; text-align:center; margin:12px 0;">
-            <input type="password" id="guruCode" placeholder="Masukkan kode akses guru" style="padding:8px 12px; border-radius:5px; border:1px solid #ccc;">
-            <button id="guruLoginBtn">OK</button>
-            <span id="guruLoginWrong" style="color:red; font-size:14px; display:none;">Kode salah!</span>
-        </div>
-
-        <!-- Tombol Unduh Jawaban & Nilai (hanya untuk guru) -->
-        <button id="downloadBtn" style="display:none; margin: 20px auto 0 auto;">Unduh Jawaban & Nilai</button>
+    <!-- Form Nama Lengkap -->
+    <div id="form-nama">
+        <label for="namaSiswa"><b>Nama Lengkap:</b></label>
+        <input type="text" id="namaSiswa" placeholder="Isi nama lengkap" autocomplete="off">
+        <button id="mulaiBtn">Mulai Kuis</button>
     </div>
-    <script src="script.js"></script>
+
+    <!-- Form Kuis -->
+    <form id="quizForm" style="display:none;">
+        <div id="question-container"></div>
+        <div id="nav-buttons">
+            <button type="button" id="prevBtn" style="display:none">&#8592;</button>
+            <button type="button" id="nextBtn">&#8594;</button>
+            <button type="submit" id="submitBtn" style="display:none">Lihat Hasil</button>
+        </div>
+    </form>
+
+    <div id="result"></div>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
