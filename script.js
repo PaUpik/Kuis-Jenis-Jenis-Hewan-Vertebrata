@@ -8,7 +8,7 @@ function shuffleArray(arr){ return arr.slice().sort(()=>Math.random()-0.5); }
 let questions = shuffleArray([
   { type:"radio", question:"Hewan vertebrata adalah hewan yang...", name:"q1", options:["a. Tidak punya tulang belakang","b. Punya tulang belakang","c. Hidup di udara","d. Memiliki cangkang keras"] },
   { type:"radio", question:"Contoh hewan yang termasuk kelompok Agnatha adalah...", name:"q2", options:["a. Kucing dan anjing","b. Lamprey dan hagfish","c. Katak dan salamander","d. Ular dan buaya"] },
-  { type:"radio", question:"Hewan yang bernapas dengan insang saat kecil dan paru‑paru saat dewasa adalah...", name:"q3", options:["a. Mamalia","b. Amfibi","c. Reptil","d. Aves"] },
+  { type:"radio", question:"Hewan yang bernapas dengan insang saat kecil dan paru-paru saat dewasa adalah...", name:"q3", options:["a. Mamalia","b. Amfibi","c. Reptil","d. Aves"] },
   { type:"radio", question:"Ciri khas hewan kelompok Pisces adalah...", name:"q4", options:["a. Memiliki bulu","b. Tubuh bersisik dan licin","c. Bertelur di darat","d. Menyusui anaknya"] },
   { type:"radio", question:"Mamalia disebut juga hewan menyusui karena...", name:"q5", options:["a. Bertelur di air","b. Memiliki sisik","c. Menyusui anaknya","d. Hidup di udara"] },
   { type:"text", question:"Sebutkan dua contoh hewan yang termasuk kelompok reptil!", name:"q6" },
@@ -100,7 +100,7 @@ document.getElementById('quizForm').onsubmit = e=>{
   resultDiv.innerHTML = `<b>Nama: ${namaSiswa}</b><br>Nilai: <b>${score}/${total}</b><br>${score===total?"Luar biasa! Semua benar 😎":score>=5?"Lumayan, ayo belajar lagi!":"Yuk, lebih giat belajar!"}`;
   document.getElementById('quizForm').style.display="none";
 
-  // Kirim email otomatis via Apps Script
+  // Kirim email otomatis via Apps Script (sudah pakai link Anda)
   fetch("https://script.google.com/macros/s/AKfycbwkLjIndWyKbb0dYThuhomwPGANPOfhYb4sd2EkETy-mDLOOZMzpxvD0p6pt8AEsAv3YA/exec", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
