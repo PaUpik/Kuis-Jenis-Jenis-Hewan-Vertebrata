@@ -24,7 +24,7 @@ h1 {
 .question {
     margin-bottom: 15px;
 }
-input[type="text"] {
+input[type="text"], input[type="password"] {
     width: 70%;
     padding: 8px;
     margin-top: 8px;
@@ -76,6 +76,61 @@ input[type="text"] {
     background: #12345b;
 }
 
+/* --- LOGIN GURU --- */
+#showGuruLoginBtn,
+#downloadBtn {
+    display: block;
+    background: #12823c;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    padding: 11px 34px;
+    min-width: 160px;
+    margin: 22px auto 0 auto;
+    box-shadow: 0 1px 5px rgba(38,78,134,0.09);
+    transition: background 0.16s;
+}
+#showGuruLoginBtn:hover,
+#downloadBtn:hover {
+    background: #085b25;
+}
+#guru-login-form {
+    text-align: center;
+    margin: 12px 0 0 0;
+}
+#guru-login-form input[type="password"] {
+    width: 210px;
+    max-width: 60vw;
+    font-size: 16px;
+    padding: 9px 10px;
+    margin-bottom: 0;
+    margin-right: 8px;
+}
+#guru-login-form button {
+    padding: 8px 16px;
+    font-size: 16px;
+    background: #264E86;
+    color: #fff;
+    border-radius: 6px;
+    border: none;
+    font-weight: bold;
+    margin: 0;
+    transition: background 0.16s;
+}
+#guru-login-form button:hover {
+    background: #12345b;
+}
+#guruLoginWrong {
+    display: inline-block;
+    margin-left: 12px;
+    color: #d70000;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
 /* --- TOMBOL --- */
 button {
     display: block;
@@ -116,12 +171,14 @@ button:hover {
     border-radius: 16px;
     width: auto;
     display: inline-block;
+    background: #264E86;
 }
 #nav-buttons button#submitBtn {
     font-size: 18px;
     min-width: 120px;
     padding: 10px 28px;
     border-radius: 16px;
+    background: #264E86;
 }
 
 /* --- RESPONSIVE --- */
@@ -144,8 +201,23 @@ button:hover {
         text-align: left;
         font-size: 17px;
     }
+    #guru-login-form input[type="password"] {
+        width: 98%;
+        max-width: 100%;
+        margin: 0 0 8px 0;
+    }
+    #guru-login-form button {
+        width: 100%;
+        margin-top: 6px;
+    }
     #nav-buttons button {
         padding: 10px 10px;
         font-size: 22px;
+    }
+    #showGuruLoginBtn, #downloadBtn {
+        min-width: 100px;
+        width: 100%;
+        font-size: 15px;
+        padding: 10px 12px;
     }
 }
