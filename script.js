@@ -1,4 +1,15 @@
-const questions = [
+// --- Shuffle Utility (Fisher-Yates) ---
+function shuffleArray(array) {
+    let arr = array.slice(); // copy array
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+// Array soal
+let questions = [
     {
         type: "radio",
         question: "1. Hewan vertebrata adalah hewan yang...",
@@ -95,6 +106,10 @@ const kunciJawaban = {
     q10: "benar"
 };
 
+// ---- Fitur Random Urutan Soal ----
+questions = shuffleArray(questions);
+// ----------------------------------
+
 let currentQuestion = 0;
 let userAnswers = {};
 
@@ -121,9 +136,19 @@ function renderQuestion(index) {
     questionContainer.innerHTML = html;
 
     // Show/hide navigation buttons
-    prevBtn.style.display = index === 0 ? "none" : "inline-block";
-    nextBtn.style.display = index === questions.length - 1 ? "none" : "inline-block";
-    submitBtn.style.display = index === questions.length - 1 ? "inline-block" : "none";
+    if (index === 0) {
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "inline-block";
+        submitBtn.style.display = "none";
+    } else if (index === questions.length - 1) {
+        prevBtn.style.display = "inline-block";
+        nextBtn.style.display = "none";
+        submitBtn.style.display = "inline-block";
+    } else {
+        prevBtn.style.display = "inline-block";
+        nextBtn.style.display = "inline-block";
+        submitBtn.style.display = "none";
+    }
 
     // Ubah isi tombol jadi panah
     prevBtn.innerHTML = "&#8592;"; // ← (panah kiri)
