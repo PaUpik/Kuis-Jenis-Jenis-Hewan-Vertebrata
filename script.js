@@ -11,16 +11,102 @@ function shuffleArray(array) {
     return arr;
 }
 
-// Array soal TANPA angka di depan!
-let questions = [/* ...soal sama seperti sebelumnya... */];
+// --- DAFTAR SOAL ---
+let questions = [
+    {
+        type: "radio",
+        question: "Hewan vertebrata adalah hewan yang...",
+        name: "q1",
+        options: [
+            "a. Tidak punya tulang belakang",
+            "b. Punya tulang belakang",
+            "c. Hidup di udara",
+            "d. Memiliki cangkang keras"
+        ]
+    },
+    {
+        type: "radio",
+        question: "Contoh hewan yang termasuk kelompok Agnatha adalah...",
+        name: "q2",
+        options: [
+            "a. Kucing dan anjing",
+            "b. Lamprey dan hagfish",
+            "c. Katak dan salamander",
+            "d. Ular dan buaya"
+        ]
+    },
+    {
+        type: "radio",
+        question: "Hewan yang bernapas dengan insang saat kecil dan paru-paru saat dewasa adalah...",
+        name: "q3",
+        options: [
+            "a. Mamalia",
+            "b. Amfibi",
+            "c. Reptil",
+            "d. Aves"
+        ]
+    },
+    {
+        type: "radio",
+        question: "Ciri khas hewan kelompok Pisces adalah...",
+        name: "q4",
+        options: [
+            "a. Memiliki bulu",
+            "b. Tubuh bersisik dan licin",
+            "c. Bertelur di darat",
+            "d. Menyusui anaknya"
+        ]
+    },
+    {
+        type: "radio",
+        question: "Mamalia disebut juga hewan menyusui karena...",
+        name: "q5",
+        options: [
+            "a. Bertelur di air",
+            "b. Memiliki sisik",
+            "c. Menyusui anaknya",
+            "d. Hidup di udara"
+        ]
+    },
+    {
+        type: "text",
+        question: "Sebutkan dua contoh hewan yang termasuk kelompok reptil!",
+        name: "q6"
+    },
+    {
+        type: "text",
+        question: "Hewan apakah yang memiliki tubuh ditutupi bulu dan punya sayap?",
+        name: "q7"
+    },
+    {
+        type: "text",
+        question: "Katak termasuk kelompok apa? Dan di mana katak bertelur?",
+        name: "q8"
+    },
+    {
+        type: "text",
+        question: "Semua burung bisa terbang. (Benar/Salah)",
+        name: "q9"
+    },
+    {
+        type: "text",
+        question: "Paus adalah mamalia laut terbesar. (Benar/Salah)",
+        name: "q10"
+    }
+];
 
-// Kunci jawaban
+// --- Kunci jawaban untuk penilaian otomatis ---
 const kunciJawaban = {
-    q1: "b", q2: "b", q3: "b", q4: "b", q5: "c",
-    q6: ["ular", "buaya", "kadal", "penyu"],
+    q1: "b",
+    q2: "b",
+    q3: "b",
+    q4: "b",
+    q5: "c",
+    q6: ["ular", "buaya", "kadal", "penyu"], // minimal dua dari ini
     q7: ["burung", "aves"],
-    q8: ["amfibi", "air", "kolam"],
-    q9: "salah", q10: "benar"
+    q8: ["amfibi", "air", "kolam"], // kelompok amfibi, bertelur di air
+    q9: "salah",
+    q10: "benar"
 };
 
 questions = shuffleArray(questions);
@@ -65,6 +151,13 @@ document.addEventListener("DOMContentLoaded", function() {
 // ------ END FORM NAMA ------
 
 function renderQuestion(index) {
+    if (!questions[index]) {
+        questionContainer.innerHTML = "<b style='color:red'>Soal tidak ditemukan. Cek array 'questions'!</b>";
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "none";
+        submitBtn.style.display = "none";
+        return;
+    }
     let q = questions[index];
     let html = `<div class="question"><p>${index + 1}. ${q.question}</p>`;
     if (q.type === "radio") {
@@ -165,11 +258,12 @@ document.getElementById('quizForm').onsubmit = function(e) {
     saveAnswer();
 
     let score = 0, total = 10;
-    if(userAnswers.q1 === kunciJawaban.q1) score++;
-    if(userAnswers.q2 === kunciJawaban.q2) score++;
-    if(userAnswers.q3 === kunciJawaban.q3) score++;
-    if(userAnswers.q4 === kunciJawaban.q4) score++;
-    if(userAnswers.q5 === kunciJawaban.q5) score++;
+    // --- Periksa benar/tidak berdasarkan urutan aslinya (berdasarkan name, bukan index)
+    if(userAnswers.q1 && userAnswers.q1 === kunciJawaban.q1) score++;
+    if(userAnswers.q2 && userAnswers.q2 === kunciJawaban.q2) score++;
+    if(userAnswers.q3 && userAnswers.q3 === kunciJawaban.q3) score++;
+    if(userAnswers.q4 && userAnswers.q4 === kunciJawaban.q4) score++;
+    if(userAnswers.q5 && userAnswers.q5 === kunciJawaban.q5) score++;
 
     let q6 = (userAnswers.q6 || "").toLowerCase();
     let count6 = 0;
@@ -207,7 +301,7 @@ document.getElementById('quizForm').onsubmit = function(e) {
 };
 
 // --- LOGIN GURU ---
-const KODE_GURU = "adminkuis2024"; // ganti sesuai keinginan
+const KODE_GURU = "adminkuis2024"; // Ganti sesuai keinginan
 
 if (showGuruLoginBtn && guruLoginForm && guruLoginBtn && guruCodeInput) {
     showGuruLoginBtn.onclick = function() {
