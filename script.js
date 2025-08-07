@@ -1,3 +1,6 @@
+// --- Nama siswa (harus isi dulu) ---
+let namaSiswa = "";
+
 // --- Fungsi Acak Array ---
 function shuffleArray(array) {
     let arr = array.slice();
@@ -117,6 +120,30 @@ const nextBtn = document.getElementById('nextBtn');
 const submitBtn = document.getElementById('submitBtn');
 const resultDiv = document.getElementById('result');
 
+// ------ FORM NAMA LENGKAP ------
+document.addEventListener("DOMContentLoaded", function() {
+    const mulaiBtn = document.getElementById('mulaiBtn');
+    const inputNama = document.getElementById('namaSiswa');
+    if (mulaiBtn && inputNama) {
+        mulaiBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            const nama = inputNama.value.trim();
+            if (nama === "") {
+                alert("Nama lengkap wajib diisi!");
+                inputNama.focus();
+                return;
+            }
+            namaSiswa = nama;
+            document.getElementById('form-nama').style.display = "none";
+            document.getElementById('quizForm').style.display = "block";
+            renderQuestion(currentQuestion);
+        });
+    } else {
+        renderQuestion(currentQuestion); // fallback (debug mode)
+    }
+});
+// ------ END FORM NAMA ------
+
 function renderQuestion(index) {
     let q = questions[index];
     let html = `<div class="question"><p>${index + 1}. ${q.question}</p>`;
@@ -161,7 +188,7 @@ function saveAnswer() {
     }
 }
 
-// Validasi WAJIB JAWAB sebelum ke soal berikutnya
+// Validasi wajib jawab sebelum ke soal berikutnya
 nextBtn.addEventListener('click', function() {
     // Validasi sebelum lanjut
     let q = questions[currentQuestion];
@@ -191,7 +218,7 @@ prevBtn.addEventListener('click', function() {
     }
 });
 
-// Validasi WAJIB ISI semua soal sebelum submit
+// Validasi wajib isi semua soal sebelum submit
 document.getElementById('quizForm').onsubmit = function(e) {
     // Validasi semua soal sudah dijawab
     for (let i = 0; i < questions.length; i++) {
@@ -240,7 +267,7 @@ document.getElementById('quizForm').onsubmit = function(e) {
     let q10 = (userAnswers.q10 || "").toLowerCase();
     if(q10 === kunciJawaban.q10) score++;
 
-    let pesan = `Nilai kamu: <b>${score}/${total}</b><br>`;
+    let pesan = `<b>Nama: ${namaSiswa}</b><br>Nilai kamu: <b>${score}/${total}</b><br>`;
     if (score == total) {
         pesan += "Luar biasa! Semua benar 😎";
     } else if (score >= 8) {
@@ -253,5 +280,3 @@ document.getElementById('quizForm').onsubmit = function(e) {
     document.getElementById("quizForm").style.display = "none";
     resultDiv.innerHTML = pesan;
 };
-
-renderQuestion(currentQuestion);
