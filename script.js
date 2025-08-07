@@ -100,8 +100,8 @@ document.getElementById('quizForm').onsubmit = e=>{
   resultDiv.innerHTML = `<b>Nama: ${namaSiswa}</b><br>Nilai: <b>${score}/${total}</b><br>${score===total?"Luar biasa! Semua benar 😎":score>=5?"Lumayan, ayo belajar lagi!":"Yuk, lebih giat belajar!"}`;
   document.getElementById('quizForm').style.display="none";
 
-  // Kirim email otomatis
-  fetch("YOUR_WEB_APPS_URL_HERE", {
+  // Kirim email otomatis via Apps Script
+  fetch("https://script.google.com/macros/s/AKfycbwkLjIndWyKbb0dYThuhomwPGANPOfhYb4sd2EkETy-mDLOOZMzpxvD0p6pt8AEsAv3YA/exec", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({ nama:namaSiswa, skor: `${score}/${total}`, jawaban: answers })
