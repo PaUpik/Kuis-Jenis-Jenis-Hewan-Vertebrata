@@ -27,7 +27,16 @@
         </form>
         
         <div id="result"></div>
-        <!-- Tombol Unduh Jawaban & Nilai -->
+        
+        <!-- Tombol Login Guru & Form kode akses -->
+        <button id="showGuruLoginBtn" style="display:none; margin:20px auto 0 auto;">Login Guru</button>
+        <div id="guru-login-form" style="display:none; text-align:center; margin:12px 0;">
+            <input type="password" id="guruCode" placeholder="Masukkan kode akses guru" style="padding:8px 12px; border-radius:5px; border:1px solid #ccc;">
+            <button id="guruLoginBtn">OK</button>
+            <span id="guruLoginWrong" style="color:red; font-size:14px; display:none;">Kode salah!</span>
+        </div>
+
+        <!-- Tombol Unduh Jawaban & Nilai (hanya untuk guru) -->
         <button id="downloadBtn" style="display:none; margin: 20px auto 0 auto;">Unduh Jawaban & Nilai</button>
     </div>
     <script src="script.js"></script>
