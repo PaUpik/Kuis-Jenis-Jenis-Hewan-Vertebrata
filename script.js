@@ -124,6 +124,10 @@ function renderQuestion(index) {
     prevBtn.style.display = index === 0 ? "none" : "inline-block";
     nextBtn.style.display = index === questions.length - 1 ? "none" : "inline-block";
     submitBtn.style.display = index === questions.length - 1 ? "inline-block" : "none";
+
+    // Ubah isi tombol jadi panah
+    prevBtn.innerHTML = "&#8592;"; // ← (panah kiri)
+    nextBtn.innerHTML = "&#8594;"; // → (panah kanan)
 }
 
 function saveAnswer() {
