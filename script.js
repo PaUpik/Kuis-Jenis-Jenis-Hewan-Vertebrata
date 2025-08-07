@@ -11,7 +11,7 @@ function shuffleArray(array) {
     return arr;
 }
 
-// --- DAFTAR SOAL ---
+// Array soal TANPA angka di depan!
 let questions = [
     {
         type: "radio",
@@ -95,16 +95,16 @@ let questions = [
     }
 ];
 
-// --- Kunci jawaban untuk penilaian otomatis ---
+// Kunci jawaban
 const kunciJawaban = {
     q1: "b",
     q2: "b",
     q3: "b",
     q4: "b",
     q5: "c",
-    q6: ["ular", "buaya", "kadal", "penyu"], // minimal dua dari ini
+    q6: ["ular", "buaya", "kadal", "penyu"],
     q7: ["burung", "aves"],
-    q8: ["amfibi", "air", "kolam"], // kelompok amfibi, bertelur di air
+    q8: ["amfibi", "air", "kolam"],
     q9: "salah",
     q10: "benar"
 };
@@ -120,13 +120,8 @@ const nextBtn = document.getElementById('nextBtn');
 const submitBtn = document.getElementById('submitBtn');
 const resultDiv = document.getElementById('result');
 const downloadBtn = document.getElementById('downloadBtn');
-const showGuruLoginBtn = document.getElementById('showGuruLoginBtn');
-const guruLoginForm = document.getElementById('guru-login-form');
-const guruCodeInput = document.getElementById('guruCode');
-const guruLoginBtn = document.getElementById('guruLoginBtn');
-const guruLoginWrong = document.getElementById('guruLoginWrong');
 
-// ------ FORM NAMA LENGKAP ------
+// FORM NAMA LENGKAP
 document.addEventListener("DOMContentLoaded", function() {
     const mulaiBtn = document.getElementById('mulaiBtn');
     const inputNama = document.getElementById('namaSiswa');
@@ -144,20 +139,10 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('quizForm').style.display = "block";
             renderQuestion(currentQuestion);
         });
-    } else {
-        renderQuestion(currentQuestion); // fallback (debug mode)
     }
 });
-// ------ END FORM NAMA ------
 
 function renderQuestion(index) {
-    if (!questions[index]) {
-        questionContainer.innerHTML = "<b style='color:red'>Soal tidak ditemukan. Cek array 'questions'!</b>";
-        prevBtn.style.display = "none";
-        nextBtn.style.display = "none";
-        submitBtn.style.display = "none";
-        return;
-    }
     let q = questions[index];
     let html = `<div class="question"><p>${index + 1}. ${q.question}</p>`;
     if (q.type === "radio") {
@@ -201,9 +186,8 @@ function saveAnswer() {
     }
 }
 
-// Validasi wajib jawab sebelum ke soal berikutnya
+// WAJIB JAWAB sebelum ke soal berikutnya
 nextBtn.addEventListener('click', function() {
-    // Validasi sebelum lanjut
     let q = questions[currentQuestion];
     let answered = false;
     if (q.type === "radio") {
@@ -231,39 +215,31 @@ prevBtn.addEventListener('click', function() {
     }
 });
 
-// Validasi wajib isi semua soal sebelum submit & tampilkan tombol login guru
 document.getElementById('quizForm').onsubmit = function(e) {
-    // Validasi semua soal sudah dijawab
+    // Pastikan jawaban terakhir disimpan!
+    saveAnswer();
+
+    // Validasi: pastikan semua soal sudah dijawab!
     for (let i = 0; i < questions.length; i++) {
         let q = questions[i];
-        if (q.type === "radio") {
-            if (!document.querySelector(`input[name="${q.name}"]:checked`)) {
-                alert(`Soal nomor ${i+1} belum dijawab!`);
-                renderQuestion(i);
-                e.preventDefault();
-                return;
-            }
-        } else if (q.type === "text") {
-            let val = document.querySelector(`input[name="${q.name}"]`).value.trim();
-            if (val.length === 0) {
-                alert(`Soal nomor ${i+1} belum dijawab!`);
-                renderQuestion(i);
-                e.preventDefault();
-                return;
-            }
+        if (!userAnswers[q.name] || userAnswers[q.name].toString().trim() === "") {
+            alert(`Soal nomor ${i+1} belum dijawab!`);
+            currentQuestion = i;
+            renderQuestion(currentQuestion);
+            e.preventDefault();
+            return;
         }
     }
 
     e.preventDefault();
-    saveAnswer();
 
+    // Perhitungan skor otomatis (tidak diubah)
     let score = 0, total = 10;
-    // --- Periksa benar/tidak berdasarkan urutan aslinya (berdasarkan name, bukan index)
-    if(userAnswers.q1 && userAnswers.q1 === kunciJawaban.q1) score++;
-    if(userAnswers.q2 && userAnswers.q2 === kunciJawaban.q2) score++;
-    if(userAnswers.q3 && userAnswers.q3 === kunciJawaban.q3) score++;
-    if(userAnswers.q4 && userAnswers.q4 === kunciJawaban.q4) score++;
-    if(userAnswers.q5 && userAnswers.q5 === kunciJawaban.q5) score++;
+    if(userAnswers.q1 === kunciJawaban.q1) score++;
+    if(userAnswers.q2 === kunciJawaban.q2) score++;
+    if(userAnswers.q3 === kunciJawaban.q3) score++;
+    if(userAnswers.q4 === kunciJawaban.q4) score++;
+    if(userAnswers.q5 === kunciJawaban.q5) score++;
 
     let q6 = (userAnswers.q6 || "").toLowerCase();
     let count6 = 0;
@@ -294,43 +270,26 @@ document.getElementById('quizForm').onsubmit = function(e) {
     document.getElementById("quizForm").style.display = "none";
     resultDiv.innerHTML = pesan;
 
-    // Munculkan tombol "Login Guru", Sembunyikan download (reset)
-    if (showGuruLoginBtn) showGuruLoginBtn.style.display = "block";
-    if (downloadBtn) downloadBtn.style.display = "none";
-    if (guruLoginForm) guruLoginForm.style.display = "none";
-};
-
-// --- LOGIN GURU ---
-const KODE_GURU = "adminkuis2024"; // Ganti sesuai keinginan
-
-if (showGuruLoginBtn && guruLoginForm && guruLoginBtn && guruCodeInput) {
-    showGuruLoginBtn.onclick = function() {
-        guruLoginForm.style.display = "block";
-        guruLoginWrong.style.display = "none";
-        guruCodeInput.value = "";
-        guruCodeInput.focus();
-    };
-    guruLoginBtn.onclick = function() {
-        if (guruCodeInput.value === KODE_GURU) {
-            guruLoginForm.style.display = "none";
-            showGuruLoginBtn.style.display = "none";
+    // Tampilkan tombol download HANYA untuk guru
+    if (downloadBtn) {
+        if (namaSiswa.trim().toLowerCase() === "adminkuis2024") {
             downloadBtn.style.display = "block";
-            guruLoginWrong.style.display = "none";
         } else {
-            guruLoginWrong.style.display = "inline";
-            guruCodeInput.value = "";
-            guruCodeInput.focus();
+            downloadBtn.style.display = "none";
         }
-    };
-}
+    }
+};
 
 // --- FUNGSI EKSPOR CSV ---
 function downloadCSV() {
     let lines = [];
     lines.push(['Nama', namaSiswa]);
     lines.push(['Skor', resultDiv.innerText.replace('Nilai kamu: ', '').replace('Luar biasa! Semua benar 😎', '').replace('Hampir sempurna, mantap!', '').replace('Lumayan, ayo belajar lagi!', '').replace('Yuk, lebih giat belajar tentang hewan vertebrata!', '')]);
-    lines.push([]);
+    lines.push([]); // Kosong, untuk spasi
+
+    // Judul kolom
     lines.push(['No', 'Soal', 'Jawaban']);
+
     questions.forEach((q, i) => {
         let jawab = userAnswers[q.name] || '';
         lines.push([
@@ -339,11 +298,15 @@ function downloadCSV() {
             jawab.replace(/"/g, '""')
         ]);
     });
+
+    // Gabung jadi CSV string
     let csvContent = lines.map(row => row.map(item => `"${item}"`).join(',')).join('\r\n');
+
+    // Download
     let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     let link = document.createElement("a");
     let filename = `kuis-vertebrata-${namaSiswa.replace(/[^a-z0-9]/gi,'_').toLowerCase()}.csv`;
-    if (navigator.msSaveBlob) {
+    if (navigator.msSaveBlob) { // IE 10+
         navigator.msSaveBlob(blob, filename);
     } else {
         let url = URL.createObjectURL(blob);
@@ -356,6 +319,7 @@ function downloadCSV() {
     }
 }
 
+// --- Event listener tombol download ---
 if (downloadBtn) {
     downloadBtn.addEventListener('click', downloadCSV);
 }
