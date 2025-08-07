@@ -1,0 +1,60 @@
+const kunciJawaban = {
+    q1: "b",
+    q2: "b",
+    q3: "b",
+    q4: "b",
+    q5: "c",
+    q6: ["ular", "buaya", "kadal", "penyu"], // minimal dua dari ini
+    q7: ["burung", "aves"],
+    q8: ["amfibi", "air", "kolam"], // kelompok amfibi, bertelur di air
+    q9: "salah",
+    q10: "benar"
+};
+
+document.getElementById('quizForm').onsubmit = function(e) {
+    e.preventDefault();
+    let score = 0;
+    let total = 10;
+    let pesan = "";
+
+    // Pilihan Ganda
+    if(document.querySelector('input[name="q1"]:checked')?.value === kunciJawaban.q1) score++;
+    if(document.querySelector('input[name="q2"]:checked')?.value === kunciJawaban.q2) score++;
+    if(document.querySelector('input[name="q3"]:checked')?.value === kunciJawaban.q3) score++;
+    if(document.querySelector('input[name="q4"]:checked')?.value === kunciJawaban.q4) score++;
+    if(document.querySelector('input[name="q5"]:checked')?.value === kunciJawaban.q5) score++;
+
+    // Isian Singkat
+    // Q6: Cek minimal 2 reptil
+    let q6 = document.querySelector('input[name="q6"]').value.toLowerCase();
+    let count6 = 0;
+    kunciJawaban.q6.forEach(reptil => { if(q6.includes(reptil)) count6++; });
+    if(count6 >= 2) score++;
+
+    // Q7: Burung/aves
+    let q7 = document.querySelector('input[name="q7"]').value.toLowerCase();
+    if(kunciJawaban.q7.some(j => q7.includes(j))) score++;
+
+    // Q8: Amfibi + bertelur di air
+    let q8 = document.querySelector('input[name="q8"]').value.toLowerCase();
+    if(q8.includes("amfibi") && (q8.includes("air") || q8.includes("kolam"))) score++;
+
+    // Benar/Salah
+    let q9 = document.querySelector('input[name="q9"]').value.toLowerCase();
+    if(q9 === kunciJawaban.q9) score++;
+    let q10 = document.querySelector('input[name="q10"]').value.toLowerCase();
+    if(q10 === kunciJawaban.q10) score++;
+
+    pesan = `Nilai kamu: <b>${score}/${total}</b><br>`;
+    if (score == total) {
+        pesan += "Luar biasa! Semua benar 😎";
+    } else if (score >= 8) {
+        pesan += "Hampir sempurna, mantap!";
+    } else if (score >= 5) {
+        pesan += "Lumayan, ayo belajar lagi!";
+    } else {
+        pesan += "Yuk, lebih giat belajar tentang hewan vertebrata!";
+    }
+
+    document.getElementById("result").innerHTML = pesan;
+};
