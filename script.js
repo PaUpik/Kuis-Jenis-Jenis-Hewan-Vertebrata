@@ -161,6 +161,28 @@ function saveAnswer() {
     }
 }
 
+// Validasi WAJIB JAWAB sebelum ke soal berikutnya
+nextBtn.addEventListener('click', function() {
+    // Validasi sebelum lanjut
+    let q = questions[currentQuestion];
+    let answered = false;
+    if (q.type === "radio") {
+        answered = !!document.querySelector(`input[name="${q.name}"]:checked`);
+    } else if (q.type === "text") {
+        let val = document.querySelector(`input[name="${q.name}"]`).value.trim();
+        answered = val.length > 0;
+    }
+    if (!answered) {
+        alert("Silakan jawab dulu sebelum ke soal berikutnya!");
+        return;
+    }
+    saveAnswer();
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion(currentQuestion);
+    }
+});
+
 prevBtn.addEventListener('click', function() {
     saveAnswer();
     if (currentQuestion > 0) {
@@ -169,15 +191,29 @@ prevBtn.addEventListener('click', function() {
     }
 });
 
-nextBtn.addEventListener('click', function() {
-    saveAnswer();
-    if (currentQuestion < questions.length - 1) {
-        currentQuestion++;
-        renderQuestion(currentQuestion);
-    }
-});
-
+// Validasi WAJIB ISI semua soal sebelum submit
 document.getElementById('quizForm').onsubmit = function(e) {
+    // Validasi semua soal sudah dijawab
+    for (let i = 0; i < questions.length; i++) {
+        let q = questions[i];
+        if (q.type === "radio") {
+            if (!document.querySelector(`input[name="${q.name}"]:checked`)) {
+                alert(`Soal nomor ${i+1} belum dijawab!`);
+                renderQuestion(i);
+                e.preventDefault();
+                return;
+            }
+        } else if (q.type === "text") {
+            let val = document.querySelector(`input[name="${q.name}"]`).value.trim();
+            if (val.length === 0) {
+                alert(`Soal nomor ${i+1} belum dijawab!`);
+                renderQuestion(i);
+                e.preventDefault();
+                return;
+            }
+        }
+    }
+
     e.preventDefault();
     saveAnswer();
 
