@@ -119,6 +119,7 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const submitBtn = document.getElementById('submitBtn');
 const resultDiv = document.getElementById('result');
+const downloadBtn = document.getElementById('downloadBtn');
 
 // ------ FORM NAMA LENGKAP ------
 document.addEventListener("DOMContentLoaded", function() {
@@ -218,7 +219,7 @@ prevBtn.addEventListener('click', function() {
     }
 });
 
-// Validasi wajib isi semua soal sebelum submit
+// Validasi wajib isi semua soal sebelum submit & tampilkan tombol download
 document.getElementById('quizForm').onsubmit = function(e) {
     // Validasi semua soal sudah dijawab
     for (let i = 0; i < questions.length; i++) {
@@ -279,7 +280,11 @@ document.getElementById('quizForm').onsubmit = function(e) {
     }
     document.getElementById("quizForm").style.display = "none";
     resultDiv.innerHTML = pesan;
+
+    // TAMPILKAN TOMBOL UNDUH
+    if (downloadBtn) downloadBtn.style.display = "block";
 };
+
 // --- FUNGSI EKSPOR CSV ---
 function downloadCSV() {
     // Siapkan header & data
@@ -320,18 +325,7 @@ function downloadCSV() {
     }
 }
 
-// --- Tampilkan tombol download setelah submit ---
-const downloadBtn = document.getElementById('downloadBtn');
+// --- Event listener tombol download ---
 if (downloadBtn) {
     downloadBtn.addEventListener('click', downloadCSV);
 }
-
-// Setelah submit, tampilkan tombol download
-// (Edit bagian paling bawah di onsubmit quizForm!)
-document.getElementById('quizForm').onsubmit = function(e) {
-    // ...[kode penilaianmu tetap]...
-    document.getElementById("quizForm").style.display = "none";
-    resultDiv.innerHTML = pesan;
-    // TAMBAHKAN INI:
-    if (downloadBtn) downloadBtn.style.display = "block";
-};
