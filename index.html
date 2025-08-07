@@ -7,76 +7,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Kuis: Jenis-Jenis Hewan Vertebrata</h1>
+        <h1 id="judul-kuis">Kuis: Jenis-Jenis Hewan Vertebrata</h1>
         <form id="quizForm">
-            <!-- Pilihan Ganda -->
-            <div class="section">
-                <h2>Pilihan Ganda</h2>
-                <div class="question">
-                    <p>1. Hewan vertebrata adalah hewan yang...</p>
-                    <label><input type="radio" name="q1" value="a"> a. Tidak punya tulang belakang</label><br>
-                    <label><input type="radio" name="q1" value="b"> b. Punya tulang belakang</label><br>
-                    <label><input type="radio" name="q1" value="c"> c. Hidup di udara</label><br>
-                    <label><input type="radio" name="q1" value="d"> d. Memiliki cangkang keras</label>
-                </div>
-                <div class="question">
-                    <p>2. Contoh hewan yang termasuk kelompok Agnatha adalah...</p>
-                    <label><input type="radio" name="q2" value="a"> a. Kucing dan anjing</label><br>
-                    <label><input type="radio" name="q2" value="b"> b. Lamprey dan hagfish</label><br>
-                    <label><input type="radio" name="q2" value="c"> c. Katak dan salamander</label><br>
-                    <label><input type="radio" name="q2" value="d"> d. Ular dan buaya</label>
-                </div>
-                <div class="question">
-                    <p>3. Hewan yang bernapas dengan insang saat kecil dan paru-paru saat dewasa adalah...</p>
-                    <label><input type="radio" name="q3" value="a"> a. Mamalia</label><br>
-                    <label><input type="radio" name="q3" value="b"> b. Amfibi</label><br>
-                    <label><input type="radio" name="q3" value="c"> c. Reptil</label><br>
-                    <label><input type="radio" name="q3" value="d"> d. Aves</label>
-                </div>
-                <div class="question">
-                    <p>4. Ciri khas hewan kelompok Pisces adalah...</p>
-                    <label><input type="radio" name="q4" value="a"> a. Memiliki bulu</label><br>
-                    <label><input type="radio" name="q4" value="b"> b. Tubuh bersisik dan licin</label><br>
-                    <label><input type="radio" name="q4" value="c"> c. Bertelur di darat</label><br>
-                    <label><input type="radio" name="q4" value="d"> d. Menyusui anaknya</label>
-                </div>
-                <div class="question">
-                    <p>5. Mamalia disebut juga hewan menyusui karena...</p>
-                    <label><input type="radio" name="q5" value="a"> a. Bertelur di air</label><br>
-                    <label><input type="radio" name="q5" value="b"> b. Memiliki sisik</label><br>
-                    <label><input type="radio" name="q5" value="c"> c. Menyusui anaknya</label><br>
-                    <label><input type="radio" name="q5" value="d"> d. Hidup di udara</label>
-                </div>
+            <div id="question-container"></div>
+            <div id="nav-buttons">
+                <button type="button" id="prevBtn" style="display:none">Sebelumnya</button>
+                <button type="button" id="nextBtn">Selanjutnya</button>
+                <button type="submit" id="submitBtn" style="display:none">Lihat Hasil</button>
             </div>
-            <!-- Isian Singkat -->
-            <div class="section">
-                <h2>Isian Singkat</h2>
-                <div class="question">
-                    <p>6. Sebutkan dua contoh hewan yang termasuk kelompok reptil!</p>
-                    <input type="text" name="q6" placeholder="Jawaban">
-                </div>
-                <div class="question">
-                    <p>7. Hewan apakah yang memiliki tubuh ditutupi bulu dan punya sayap?</p>
-                    <input type="text" name="q7" placeholder="Jawaban">
-                </div>
-                <div class="question">
-                    <p>8. Katak termasuk kelompok apa? Dan di mana katak bertelur?</p>
-                    <input type="text" name="q8" placeholder="Jawaban">
-                </div>
-            </div>
-            <!-- Benar/Salah -->
-            <div class="section">
-                <h2>Benar atau Salah</h2>
-                <div class="question">
-                    <p>9. Semua burung bisa terbang. (Benar/Salah)</p>
-                    <input type="text" name="q9" placeholder="Jawaban">
-                </div>
-                <div class="question">
-                    <p>10. Paus adalah mamalia laut terbesar. (Benar/Salah)</p>
-                    <input type="text" name="q10" placeholder="Jawaban">
-                </div>
-            </div>
-            <button type="submit">Kirim Jawaban</button>
         </form>
         <div id="result"></div>
     </div>
