@@ -2,7 +2,7 @@
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby_Zb67rrwCOyDjA6mb-jjh1g9uid4ehLd_T7tYL-wSzQogy7tC6yiQdsdnPvPWyRNnbQ/exec";
 
 // --- Soal-Soal (tanpa angka depan) ---
-let questions = [
+let questionsRaw = [
     {
         type: "radio",
         question: "Hewan vertebrata adalah hewan yang...",
@@ -99,7 +99,6 @@ const kunciJawaban = {
     q10: "benar"
 };
 
-// --- Acak Soal ---
 function shuffleArray(array) {
     let arr = array.slice();
     for (let i = arr.length - 1; i > 0; i--) {
@@ -108,9 +107,9 @@ function shuffleArray(array) {
     }
     return arr;
 }
-questions = shuffleArray(questions);
 
-// --- Variabel Quiz ---
+// --- Variabel Quiz (global) ---
+let questions = [];
 let namaSiswa = "";
 let currentQuestion = 0;
 let userAnswers = {};
@@ -122,7 +121,7 @@ const nextBtn = document.getElementById('nextBtn');
 const submitBtn = document.getElementById('submitBtn');
 const resultDiv = document.getElementById('result');
 
-// --- FORM NAMA LENGKAP ---
+// --- FORM NAMA LENGKAP dan Mulai Quiz ---
 document.addEventListener("DOMContentLoaded", function() {
     const mulaiBtn = document.getElementById('mulaiBtn');
     const inputNama = document.getElementById('namaSiswa');
@@ -134,7 +133,11 @@ document.addEventListener("DOMContentLoaded", function() {
             inputNama.focus();
             return;
         }
+        // Soal diacak sekali saja di sini!
+        questions = shuffleArray(questionsRaw);
         namaSiswa = nama;
+        currentQuestion = 0;
+        userAnswers = {};
         document.getElementById('form-nama').style.display = "none";
         document.getElementById('quizForm').style.display = "block";
         renderQuestion(currentQuestion);
@@ -214,15 +217,14 @@ document.getElementById('quizForm').onsubmit = function(e) {
     for (let i = 0; i < questions.length; i++) {
         let q = questions[i];
         if (q.type === "radio") {
-            if (!document.querySelector(`input[name="${q.name}"]:checked`)) {
+            if (!userAnswers[q.name] || userAnswers[q.name] === "") {
                 alert(`Soal nomor ${i+1} belum dijawab!`);
                 renderQuestion(i);
                 e.preventDefault();
                 return;
             }
         } else if (q.type === "text") {
-            let val = document.querySelector(`input[name="${q.name}"]`).value.trim();
-            if (val.length === 0) {
+            if (!userAnswers[q.name] || userAnswers[q.name].trim().length === 0) {
                 alert(`Soal nomor ${i+1} belum dijawab!`);
                 renderQuestion(i);
                 e.preventDefault();
