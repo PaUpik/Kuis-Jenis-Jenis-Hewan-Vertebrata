@@ -1,5 +1,5 @@
 // === Konfigurasi URL Web Apps Script ===
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwkLjIndWyKbb0dYThuhomwPGANPOfhYb4sd2EkETy-mDLOOZMzpxvD0p6pt8AEsAv3YA/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby_Zb67rrwCOyDjA6mb-jjh1g9uid4ehLd_T7tYL-wSzQogy7tC6yiQdsdnPvPWyRNnbQ/exec";
 
 // --- Soal-Soal (tanpa angka depan) ---
 let questions = [
